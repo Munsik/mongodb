@@ -19,6 +19,7 @@ const COLLECTION_NAME = "embedded_movies";
 const client = new MongoClient(MONGO_URI);
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+<<<<<<< HEAD
 // 유사도 계산 함수
 function calculateSimilarity(vector1, vector2) {
   if (!Array.isArray(vector1) || !Array.isArray(vector2)) {
@@ -39,6 +40,9 @@ function calculateSimilarity(vector1, vector2) {
 }
 
 // MongoDB Aggregation Pipeline 생성
+=======
+// Use MongoDB Aggregation Pipeline for Similarity Calculation
+>>>>>>> 9d01a2a (2nd)
 function calculateSimilarityPipeline(queryVector) {
   return [
     {
@@ -91,7 +95,11 @@ function calculateSimilarityPipeline(queryVector) {
   ];
 }
 
+<<<<<<< HEAD
 // OpenAI 임베딩 생성 함수
+=======
+// Generate Vector using OpenAI API
+>>>>>>> 9d01a2a (2nd)
 async function generateVector(inputText) {
   const response = await axios.post(
     "https://api.openai.com/v1/embeddings",
@@ -101,7 +109,11 @@ async function generateVector(inputText) {
   return response.data.data[0].embedding;
 }
 
+<<<<<<< HEAD
 // 검색 엔드포인트
+=======
+// Search Route
+>>>>>>> 9d01a2a (2nd)
 app.post("/search", async (req, res) => {
   const { query, mode } = req.body;
 
@@ -109,7 +121,11 @@ app.post("/search", async (req, res) => {
     return res.status(400).json({ error: "Query and mode are required." });
   }
 
+<<<<<<< HEAD
   // 시작 시간 측정
+=======
+  // Start Time
+>>>>>>> 9d01a2a (2nd)
   const startTime = process.hrtime();
 
   try {
@@ -134,14 +150,45 @@ app.post("/search", async (req, res) => {
         { $limit: 10 },
       ]);
       results = await cursor.toArray();
+<<<<<<< HEAD
     } else if (["hybrid", "rag"].includes(mode)) {
+=======
+    } 
+    
+    else if (["hybrid", "rag"].includes(mode)) {
+>>>>>>> 9d01a2a (2nd)
       const queryVector = await generateVector(query);
 
       const cursor = await collection.aggregate([
         ...(mode === "hybrid"
+<<<<<<< HEAD
           ? [{ $match: { $text: { $search: query } } }]
           : []),
         ...calculateSimilarityPipeline(queryVector),
+=======
+          ? [
+              { $match: { $text: { $search: query } } },
+              {
+                $addFields: {
+                  textScore: { $meta: "textScore" }
+                }
+              }
+            ]
+          : []),
+        ...calculateSimilarityPipeline(queryVector),
+        {
+          $addFields: {
+            weightedScore: {
+              $add: [
+                { $multiply: ["$similarity", 0.4] },
+                { $multiply: ["$textScore", 0.6] }
+              ]
+            }
+          }
+        },
+        { $sort: { weightedScore: -1 } },
+        { $limit: 10 },
+>>>>>>> 9d01a2a (2nd)
       ]);
 
       results = await cursor.toArray();
@@ -171,7 +218,11 @@ app.post("/search", async (req, res) => {
       return res.status(400).json({ error: "Invalid search mode." });
     }
 
+<<<<<<< HEAD
     // 종료 시간 측정
+=======
+    // End Time
+>>>>>>> 9d01a2a (2nd)
     const [seconds, nanoseconds] = process.hrtime(startTime);
     const elapsedTime = (seconds * 1000 + nanoseconds / 1e6).toFixed(2); // 밀리초로 변환
 
