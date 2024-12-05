@@ -1,0 +1,62 @@
+/* 검색 컨테이너: search box와 버튼을 한 줄로 배치 */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* search box와 버튼 간격 */
+  margin-top: 20px;
+}
+
+.search-box {
+  width: 100ch;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.search-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* 검색 모드 스타일 */
+.search-modes {
+  margin-top: 15px;
+  display: flex;
+  gap: 15px;
+}
+
+.search-modes label {
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* 에러 메시지 스타일 */
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+/* 결과 테이블 스타일 */
+.results-table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.results-table th,
+.results-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
