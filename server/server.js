@@ -43,7 +43,7 @@ app.post("/search", async (req, res) => {
   if (!query || !mode) {
     return res.status(400).json({ error: "Query and mode are required." });
   }
-
+  // start time
   const startTime = process.hrtime();
 
   try {
@@ -82,7 +82,7 @@ app.post("/search", async (req, res) => {
             plot: 1,
             fullplot: 1,
           })
-          .limit(50)
+          .limit(10)
           .toArray();
 
         const pipeline = [
@@ -103,7 +103,7 @@ app.post("/search", async (req, res) => {
         results = [...textResults, ...vectorResults].map((doc) => ({
           ...doc,
           weightedScore: doc.score
-            ? 0.4 * doc.score + 0.6 * (doc.similarity || 0)
+            ? 0.6 * doc.score + 0.4 * (doc.similarity || 0)
             : doc.similarity,
         }));
         results.sort((a, b) => b.weightedScore - a.weightedScore);
@@ -117,7 +117,7 @@ app.post("/search", async (req, res) => {
             plot: 1,
             fullplot: 1,
           })
-          .limit(50)
+          .limit(10)
           .toArray();
 
         const pipeline = [
@@ -152,7 +152,7 @@ app.post("/search", async (req, res) => {
           {
             role: "system",
             content:
-              "You are a movie critic and a famous director. Analyze the movies that the user has provided in the context and recommend the 5 most optimized movies for this user. When recommending, please provide the title and a brief description. Please respond by applying HTML tags including line breaks so that each recommended movie can be displayed on its own line. And at the very beginning, please include the following sentence: The following movies are the most recommended to you.",
+              "You are an esteemed film critic and renowned director. Based on the movie context provided by the user, analyze it and recommend 5 movies that would be most suitable for this user. For each recommendation, provide the title and a brief description. Format your response using HTML line break tags to display each recommended movie on a separate line. Begin your response with the following statement: \"The following movies are highly recommended for you:\" Please provide your recommendations in this format: <br>1. [Movie Title] - [Brief Description] <br>2. [Movie Title] - [Brief Description] <br>3. [Movie Title] - [Brief Description] <br>4. [Movie Title] - [Brief Description] <br>5. [Movie Title] - [Brief Description]",
           },
           { role: "user", content: `Original Question: ${query}` },
           { role: "user", content: `Context:\n${context}` },

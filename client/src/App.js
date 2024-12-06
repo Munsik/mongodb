@@ -108,7 +108,7 @@ function App() {
 
         {searchTime !== null && (
           <p className="search-time">
-            Search completed in {searchTime} ms (Server time: {serverTime} ms).
+            Search completed in {searchTime} ms (Server time: {serverTime}).
           </p>
         )}
         {error && <p className="error">{error}</p>}
